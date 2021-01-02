@@ -4,7 +4,6 @@ import sys
 
 
 def main(argv):
-    # print(argv)
     if len(argv) > 1:
         logfile = argv[1]
         resultdir = argv[2]
@@ -68,7 +67,6 @@ def networktraffic(logfile, resultdir):
 
     with open(resultlog, 'w') as target:
         target.write(f'{DIO_sent}, {DIS_sent}, {DAO_sent}\n')
-        
     print('\nNETWORK TRAFFIC')
     print('===============')
     print('DIO sent\tDIS sent\tDAO sent')
@@ -122,3 +120,4 @@ if __name__ == "__main__":
 '''
 problems:
 count of lost packets is different from perl script
+'''
