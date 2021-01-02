@@ -10,20 +10,19 @@ def main(argv):
     else:
         resultdir = '/home/anirudha/final_year_project/results'
         logfile = '/home/anirudha/final_year_project/mrhof100log.txt'
-
     print('\nusing logfile: ', logfile)
     print('result directory: ', resultdir)
+    energyconsumption(logfile, resultdir)
     networksetuptime(logfile, resultdir)
     networktraffic(logfile,resultdir)
     network_latency_reliability(logfile, resultdir)
 
-# def energyconsumption(logfile, resultdir, nodes_count):
-#     resultlog = resultdir + '/energy_consumption.txt'
-#     total_cpu, total_lpm, total_transmit, total_listen = 0, 0, 0, 0
-#     # print(resultlog)
-#     print('ENERGY CONSUMPTION')
-#     print('==================')
-#     print('TODO')
+def energyconsumption(logfile, resultdir):
+    resultlog = resultdir + '/energy_consumption.txt'
+    total_cpu, total_lpm, total_transmit, total_listen = 0, 0, 0, 0
+    print('\nENERGY CONSUMPTION')
+    print('==================')
+    print('TODO')
 
 
 def networksetuptime(logfile, resultdir):
@@ -35,7 +34,7 @@ def networksetuptime(logfile, resultdir):
             txt = re.findall(r'\d+', line)
             # print(txt)
             time = int(txt[0]) * 60000 + int(txt[1]) * 1000 + int(txt[2])
-            if 'RPL: Sending unicast-DIO with rank' in line or 'RPL: Sending a multicast-DIO with rank' in line:
+            if '-DIO with rank' in line:
                 if first_DIO_sent == 0:
                     # print(line[:10])
                     first_DIO_sent = time
@@ -48,10 +47,12 @@ def networksetuptime(logfile, resultdir):
         resultfile.write(str(last_DIO_joined_DAG-first_DIO_sent) + '\n')
 
     print('\nNETWORK SETUP TIME')
-    print('==================')
     print('number of nodes: ', node_count)
+    print('===================================================')
     print('First DIO sent\tLast DIO joined DAG\tSetup time')
+    print('---------------------------------------------------')
     print(f'{first_DIO_sent}\t\t{last_DIO_joined_DAG}\t\t\t{last_DIO_joined_DAG - first_DIO_sent}')
+    print('===================================================')
 
 def networktraffic(logfile, resultdir):
     DIO_sent, DAO_sent, DIS_sent = 0, 0, 0
@@ -68,9 +69,11 @@ def networktraffic(logfile, resultdir):
     with open(resultlog, 'w') as target:
         target.write(f'{DIO_sent}, {DIS_sent}, {DAO_sent}\n')
     print('\nNETWORK TRAFFIC')
-    print('===============')
+    print('=======================================')
     print('DIO sent\tDIS sent\tDAO sent')
+    print('---------------------------------------')
     print(f'{DIO_sent}\t\t{DIS_sent}\t\t{DAO_sent}')
+    print('=======================================')
 
 def network_latency_reliability(logfile, resultdir):
     resultlog = resultdir + '/latency.txt'
@@ -81,37 +84,38 @@ def network_latency_reliability(logfile, resultdir):
     with open(logfile) as file:
         for line in file:
             txt = re.findall(r"\d+", line)
-            time = int(txt[0])*6000 + int(txt[1])*1000 + int(txt[2])
+            # print(txt)
+            time = int(txt[0])*60000 + int(txt[1])*1000 + int(txt[2])
             if 'DATA send to' in line:
                 # print(line)
                 sent_packets += 1
                 try:
-                    message_data[txt[-2]][txt[-1]] = time
+                    #print(txt[0], txt[1], txt[2], txt[3], txt[4], line)
+                    message_data[txt[3]][txt[4]] = time
                 except KeyError:
-                    message_data[txt[-2]] = {txt[-1]: time}
+                    message_data[txt[3]] = {txt[4]: time}
             elif 'DATA recv from' in line:
+                # print(line)
                 try:
-                    sendtime = message_data[txt[-1]][txt[-2]]
+                    #print(txt[0], txt[1], txt[2], txt[3], txt[4], line)
+                    sendtime = message_data[txt[4]][txt[3]]
+                    #del(message_data[txt[-2]][txt[-3]])
                     recieved_packets += 1
                     latency += time - sendtime
-                    # print(latency)
-                except KeyError:
-                    pass
-                # print(line)
-    '''==========================='''
-    i = 0
-    for key in sorted(message_data.keys(), key=lambda x:int(x)):
-        print('i:', key)
-        for key2 in sorted(message_data[key]):
-            i += 1
-            print('j:', key2)
-    '''==========================='''
+                except KeyError as E:
+                    print('fail')
+                # print(line);;
+
 
     lost_packets = sent_packets - recieved_packets
+    with open(resultlog, 'w') as file:
+        file.write(f'{sent_packets},{latency/recieved_packets:.2f},{(sent_packets - lost_packets)/sent_packets * 100:.2f},{lost_packets}')
     print('\nNETWORK LATENCY & PDR')
-    print('=====================')
+    print('=============================================================')
     print('sent packets\taverage latency\tPDR\tlost packets')
-    print(f'{sent_packets}\t{latency/recieved_packets}\t{(sent_packets - lost_packets)/sent_packets * 100}\t{lost_packets}')
+    print('-------------------------------------------------------------')
+    print(f'{sent_packets}\t\t{latency/recieved_packets:.2f}\t\t{(sent_packets - lost_packets)/sent_packets * 100:.2f}\t{lost_packets}')
+    print('=============================================================')
     # pprint.pp(message_data)
 
 if __name__ == "__main__":

@@ -5,7 +5,7 @@ use Data::Dumper qw(Dumper);
 my $nodes_count=100;
 
 my $resultdir="/home/anirudha/final_year_project"; #Result directory path
-my $logfile="/home/anirudha/loglistener.txt";#final_year_project/mrhof100log.txt"; #Logfile
+my $logfile="/home/anirudha/final_year_project/mrhof100log.txt";#final_year_project/mrhof100log.txt"; #Logfile
 
 energyconsumption($logfile,$resultdir,$nodes_count);
 networksetuptime($logfile,$resultdir);
@@ -51,9 +51,9 @@ sub energyconsumption{
 #13430	ID:4	RPL: Sending a multicast-DIO with rank 844
 
 
-#6287	ID:2	RPL: Joined DAG with instance ID 30, rank %hu, DAG ID 
-#6327	ID:7	RPL: Joined DAG with instance ID 30, rank %hu, DAG ID 
-#6434	ID:13	RPL: Joined DAG with instance ID 30, rank %hu, DAG ID 
+#6287	ID:2	RPL: Joined DAG with instance ID 30, rank %hu, DAG ID
+#6327	ID:7	RPL: Joined DAG with instance ID 30, rank %hu, DAG ID
+#6434	ID:13	RPL: Joined DAG with instance ID 30, rank %hu, DAG ID
 
 sub networksetuptime{
 	my $resultlog="$_[1]/network_setup_time.txt";
@@ -68,26 +68,25 @@ sub networksetuptime{
 	foreach my $line (<$fh_logfile>)
 	{
 		#7211949:1:RPL : Prefix announced in DIO // RPL: Sending multicast-DIO with rank
-		if ($line =~ m/(\d+)(\s)ID:\d+(\s)RPL: Sending unicast-DIO with rank (\d+)/ or $line =~ m/(\d+)(\s)ID:\d+(\s)RPL: Sending a multicast-DIO with rank (\d+)/)
+		if ($line =~ m/(\d+):(\d+).(\d+)(\s)ID:\d+(\s)RPL: Sending unicast-DIO with rank (\d+)/ or $line =~ m/(\d+):(\d+).(\d+)(\s)ID:\d+(\s)RPL: Sending a multicast-DIO with rank (\d+)/)
 		{
 			if ($firstDIOsent eq 0)
 			{
 				print $line;
-				$firstDIOsent = $1;
+				$firstDIOsent = $1 * 60000 + $2 * 1000 + $3;
 			}
 		}
-		else 
+		else
 		{
 			#4571266:6:RPL: Joined DAG with instance ID
-			if ($line=~m/(\d+)(\s)ID:(\d+)(\s)RPL: Joined DAG with instance ID (\d+), rank %hu, DAG ID /)
+			if ($line=~m/(\d+):(\d+).(\d+)(\s)ID:(\d+)(\s)RPL: Joined DAG with instance ID (\d+), rank %hu, DAG ID /)
 			{
 				#print $line;
-				$lastDIOjoinedDAG=$1;
+				$lastDIOjoinedDAG= $1 * 60000 + $2 * 1000 + $3;
 			}
 		}
-		
 	}
-	printf "NETWORK SETUP TIME \n";
+	printf "\nNETWORK SETUP TIME \n";
 	printf "============\n";
 	printf "First DIO" . "\t" . "Last DIO joined DAG \t Setup Time(ms) \n";
 	my $row = sprintf "%-.0f, %-.0f, %-.0f\r\n", $firstDIOsent,$lastDIOjoinedDAG,$lastDIOjoinedDAG-$firstDIOsent;
@@ -97,21 +96,20 @@ sub networksetuptime{
 	print $fh_resultlog $row1;
 	printf "\n";
 	close $fh_resultlog;
-	close $fh_logfile;	
+	close $fh_logfile;
 }
 
 sub networktraffic {
     my $logfile=$_[0];
-	# set the output (result) file name 
-	my $resultlog="$_[1]/network_traffic.txt"; 
+	# set the output (result) file name
+	my $resultlog="$_[1]/network_traffic.txt";
 	open (my $fh_resultlog,">>",$resultlog) or die $!;
 	open (my $fh_logfile,$logfile) or die $!;
 	#print $logfile;
 	# General Idea: Find the corresponding lines and get the value of DIS,DIO,5A0
-	my ($DIOsent, $DISsent, $DAOsent) = (0,0,0); 
+	my ($DIOsent, $DISsent, $DAOsent) = (0,0,0);
 	#my %hash_dio=();
 	foreach my $line(<$fh_logfile>){
-		
 		if ($line =~ m/(\d+)(\s)ID:\d+(\s)RPL: Sending unicast-DIO with rank (\d+)/ or $line =~ m/(\d+)(\s)ID:\d+(\s)RPL: Sending a multicast-DIO with rank (\d+)/){
 			#print $line;
 			$DIOsent = $DIOsent + 1;
@@ -131,7 +129,7 @@ sub networktraffic {
 	printf "\nNETWORK TRAFFIC\n";
 	printf 	"==============\n";
 	printf "DIO\t\tDIS\t\tDAO\n";
-	my $row = sprintf "%-15d %-15d %-15d\n" ,$DIOsent, $DISsent, $DAOsent ; 
+	my $row = sprintf "%-15d %-15d %-15d\n" ,$DIOsent, $DISsent, $DAOsent ;
 	printf $row;
 	$row = sprintf "%-d, %-d, %-d \r\n" ,$DIOsent, $DISsent, $DAOsent ;
 	print $fh_resultlog $row;
@@ -149,10 +147,10 @@ sub networktraffic {
 		# save nodenr,packetnr, time
 		my $nodenr= $_[0]; my $packetnr= $_[1]; my $time = $_[2];
 		if (exists $send{$nodenr}) {
-			# if the element exists in send hash then add it to the 2nd hash only 
+			# if the element exists in send hash then add it to the 2nd hash only
 			$send{$nodenr}->{$packetnr} = $time;
 		} else {
-			# if the element does not exist in send hash, then add to both hashes 
+			# if the element does not exist in send hash, then add to both hashes
 			$send{$nodenr}= {$packetnr => $time};
 		}
 	}
@@ -162,31 +160,31 @@ sub networktraffic {
 			delete $send{$_};
 		}
 	}
-	sub printLostPackets { 
+	sub printLostPackets {
 		my	$lpackets = 0;
 		foreach my $out (sort {$a <=> $b} keys %send) {
-			print "i: $out \n";
+                #print "i: $out \n";
 			foreach my $key ( sort {$a <=> $b} keys %{$send{$out}}) {
-				# printf "node: ;out packet: Skey time: csend{Out}{5key}\n"; 
+				# printf "node: ;out packet: Skey time: csend{Out}{5key}\n";
 				$lpackets = $lpackets + 1;
-				print "j: $key\n";
+                #print "j: $key\n";
 			}
 		}
 		return $lpackets;
 	}
 
 	sub lookupSendTime{
-		my $nodenr= $_[0]; my $packetnr= $_[1]; my $time = $_[2]; 
+		my $nodenr= $_[0]; my $packetnr= $_[1]; my $time = $_[2];
 		# look
 		if (exists $send{$nodenr}{$packetnr}) {
-			my $sendTime = $send{$nodenr}{$packetnr}; # for compute latency 
-			# if matches then delete, no need to keep it any more 
+			my $sendTime = $send{$nodenr}{$packetnr}; # for compute latency
+			# if matches then delete, no need to keep it any more
 			delete($send{$nodenr}{$packetnr});
 			return($sendTime);
 		}
 		return(-1);
 	}
-	print Dumper(\%send);
+	# print Dumper(\%send);
 } # end of outer block
 
 
@@ -206,62 +204,36 @@ sub networklatency_reliability {
 	my ($lostpackets) = 0;
 	foreach my $line(<$fh_logfile>){	# line can be either sending or receiving
 		#printf $line;
-		if ($line=~ m/(\d+)(\s)ID:(\d+)(\s)DATA send to (\d+) 'Hello'/) {
-			# print $1;
+		if ($line=~ m/(\d+)(\s)ID:(\d+)(\s)DATA send to 1 'Hello (\d+)'/) {
+			print $1;
 			$nodenr=$3; $packetnr=$5; $time = $1; # save nodenr,packetnr, time
-            printf "node:$nodenr, packetnr:$packetnr, time:$time \n";
-			$noSendPackets = $noSendPackets + 1;# save this sending time of each packet to the hash %send 
-            printf "noSendPackets:$noSendPackets \n";			
+            printf "sent node:$nodenr, packetnr:$packetnr, time:$time \n";
+			$noSendPackets = $noSendPackets + 1;# save this sending time of each packet to the hash %send
+            printf "noSendPackets:$noSendPackets \n";
             $counter1= $counter1 +1;
 			saveSendTime($nodenr, $packetnr, $time );
-		} 
-
-#62706:ID:12:DATA send to 1 'Hello 1' ----$nodenr=$2; $packetnr=$3; $time = $1;
-#62814:ID:1:DATA recv 'Hello 1 from the client' from 12 ---$nodenr=$4; $packetnr=$2; $time = $1;
-#63013:ID:8:DATA send to 1 'Hello 1'
-#63060:ID:1:DATA recv 'Hello 1 from the client' from 8
-#63467:ID:20:DATA send to 1 'Hello 1'
-#63556:ID:1:DATA recv 'Hello 1 from the client' from 20
-#63631:ID:16:DATA send to 1 'Hello 1'
-
-#LATENCY2.PL READS DATA in this form
-#1867970	ID:1	DATA recv 'Hello 31 from the client' from 14   
-#1875052	ID:2	RPL: Sending a multicast-DIO with rank 512
-#1876176	ID:6	RPL: Sending a multicast-DIO with rank 640
-#1879170	ID:7	DATA send to 1 'Hello 31'                    $nodenr=$3   here it is 7 ; $packetnr=$5  here 1 ; $time = $1 here 1879170;
-#1879336	ID:1	DATA recv 'Hello 31 from the client' from 7
-#1884613	ID:15	DATA send to 1 'Hello 31'                  node:15, packet:1, time:1884613 
-#1884766	ID:1	DATA recv 'Hello 31 from the client' from 9     node:9, packet:1 , time:1884766   $nodenr=$6; $packetnr=$3; $time = $1;   
-#1885132	ID:1	DATA recv 'Hello 31 from the client' from 15
-#1888696	ID:18	DATA send to 1 'Hello 31'
-#88279	ID:16	DATA send to 1 'Hello'
-#88409	ID:1	30 0 87 0 4112 1 1 0 22 11204 0 4075 40704 229 564 257 128 844 1 131 252 1 189 182 65535 65535 0 0 0 0
-#88411	ID:1	DATA recv from 16 ''
-#93612	ID:13	DATA send to 1 'Hello'
-#93685	ID:1	30 0 93 0 3341 1 1 0 22 11834 0 4927 42379 234 626 257 128 684 1 131 252 1 189 182 65535 65535 0 0 0 0
-#93687	ID:1	DATA recv from 13 ''
-   
-    	else { #printf $line;
-            if ($line=~ m/(\d+)(\s)ID:(\d+)(\s)DATA recv from (\d+)/) { 
+		}
+		else {
+			if ($line=~ m/(\d+)(\s)ID:(\d+)(\s)DATA recv from (\d+)/) {
 				$nodenr=$5; $packetnr=$3; $time = $1; # save nodenr,packetnr, time
-                printf "node:$nodenr, packetnr:$packetnr , time:$time \n";
-				# check if send table has a corresponding sendTime, if yes(ofcourse) then calculate latency 
+				printf "recieved node:$nodenr, packetnr:$packetnr , time:$time \n";
+				# check if send table has a corresponding sendTime, if yes(ofcourse) then calculate latency
 				$sendTime = lookupSendTime($nodenr, $packetnr,$time);
-			    if ( $sendTime > -1) {
+				if ( $sendTime > -1) {
 					# we have a match in sendTable
 					$noRecvPackets = $noRecvPackets + 1;
-                    printf "noRecvPackets: $noRecvPackets \n";
+					printf "noRecvPackets: $noRecvPackets \n";
 
 					$totalLatency = $totalLatency + ($time - $sendTime);
-                    printf "latency: $totalLatency \n";
-                    $counter2 =$counter2 +1;
+					printf "latency: $totalLatency \n";
+					$counter2 =$counter2 +1;
 				}
 			}
-		} 
+		}
     }# end of foreach
-	# printf "lost packets are:\n"; 
-	$lostpackets = printLostPackets(); 
-	printf "NETWORK LATENCY & PDR\n"; 
+    # printf "lost packets are:\n";
+	$lostpackets = printLostPackets();
+	printf "NETWORK LATENCY & PDR\n";
 	printf "=====================\n";
 	my $row = "no of SendPackets\tAverage Latency(ms)\tPDR\tLost Packets\n";
 	printf $row;
@@ -272,7 +244,3 @@ sub networklatency_reliability {
 	print $fh_resultlog $row;
 	close $fh_resultlog; close $fh_logfile;
 }
-
-
-
-
