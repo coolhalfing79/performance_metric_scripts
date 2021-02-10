@@ -7,7 +7,7 @@ import os
 import numpy as np
 import matplotlib.pyplot as plt
 
-plt.style.use('seaborn')
+#plt.style.use('seaborn')
 
 
 labels = [
@@ -42,7 +42,7 @@ for file in files:
     fig, ax = plt.subplots(3, 3)
     MET = 0
     for row in ax:
-        fig.suptitle(file)
+        fig.suptitle(file[:-4])
         for col in row:
             col.bar(X[:1] - WIDTH, OF0[MET:MET+1], WIDTH)
             col.bar(X[:1], MRHOF[MET:MET+1], WIDTH)
@@ -50,5 +50,5 @@ for file in files:
             col.set_xticklabels(labels[MET:MET+1])
             MET += 1
         fig.legend(['mrhof', 'of0'])
-plt.tight_layout()
+#plt.tight_layout()
 plt.show()
