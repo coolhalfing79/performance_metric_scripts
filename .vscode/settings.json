@@ -1,0 +1,6 @@
+{
+    "python.linting.pylintEnabled": true,
+    "python.linting.enabled": true,
+    "python.linting.pylintUseMinimalCheckers": false,
+    "python.pythonPath": "/home/anirudha/.local/share/virtualenvs/performance_metric_scripts-qV-m5DQD/bin/python"
+}
