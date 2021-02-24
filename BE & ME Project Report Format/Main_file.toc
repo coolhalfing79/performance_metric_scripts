@@ -1,0 +1,36 @@
+\contentsline {chapter}{\numberline {1}Introduction}{1}%
+\contentsline {section}{\numberline {1.1}Preamble}{1}%
+\contentsline {section}{\numberline {1.2}Motivation}{2}%
+\contentsline {section}{\numberline {1.3}Outline}{2}%
+\contentsline {subsection}{\numberline {1.3.1}Topology}{3}%
+\contentsline {subsection}{\numberline {1.3.2}Important terminology}{4}%
+\contentsline {subsection}{\numberline {1.3.3}ICMPv6 RPL control message}{5}%
+\contentsline {chapter}{\numberline {2}Literature Survey}{8}%
+\contentsline {subsection}{\numberline {2.0.1}Papers Reviewed}{8}%
+\contentsline {chapter}{\numberline {3}Project Objectives}{12}%
+\contentsline {section}{\numberline {3.1}Project Objectives}{12}%
+\contentsline {section}{\numberline {3.2}Project Methodology}{13}%
+\contentsline {chapter}{\numberline {4}Performance Evaluation}{16}%
+\contentsline {section}{\numberline {4.1}Simulations Environment}{16}%
+\contentsline {subsection}{\numberline {4.1.1}Results of simulation}{18}%
+\contentsline {chapter}{\numberline {5}Design and Implementation}{21}%
+\contentsline {section}{\numberline {5.1}Conceptual Design}{21}%
+\contentsline {subsection}{\numberline {5.1.1}Fuzzy Inference System Design}{21}%
+\contentsline {subsubsection}{\numberline {5.1.1.1}Linguistic variables}{22}%
+\contentsline {subsubsection}{\numberline {5.1.1.2}Fuzzification process}{22}%
+\contentsline {section}{\numberline {5.2}Detailed Design}{25}%
+\contentsline {subsection}{\numberline {5.2.1}Implementation of Fuzzy Logic Controller in MATLAB}{25}%
+\contentsline {subsubsection}{\numberline {5.2.1.1}Fuzzy Logic Designer}{26}%
+\contentsline {subsection}{\numberline {5.2.2}Requirements for implementing an OF in Contiki OS}{27}%
+\contentsline {subsection}{\numberline {5.2.3}Implementation of a FIS in C}{29}%
+\contentsline {subsubsection}{\numberline {5.2.3.1}Fuzzification}{29}%
+\contentsline {subsubsection}{\numberline {5.2.3.2}Fuzzy Inference}{33}%
+\contentsline {subsubsection}{\numberline {5.2.3.3}Aggregation}{33}%
+\contentsline {chapter}{\numberline {6}Results and Discussion}{34}%
+\contentsline {section}{\numberline {6.1}Results}{34}%
+\contentsline {subsection}{\numberline {6.1.1}Case1}{35}%
+\contentsline {subsection}{\numberline {6.1.2}Case 2}{36}%
+\contentsline {section}{\numberline {6.2}Discussion}{37}%
+\contentsline {chapter}{\numberline {7}Conclusion}{38}%
+\contentsline {section}{\numberline {7.1}General Conclusion}{38}%
+\contentsline {section}{\numberline {7.2}Future Work}{38}%

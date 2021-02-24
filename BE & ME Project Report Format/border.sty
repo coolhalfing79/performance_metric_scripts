@@ -1,0 +1,14 @@
+%DO NOT MESS AROUND WITH THE CODE ON THIS PAGE UNLESS YOU %REALLY KNOW WHAT YOU ARE DOING
+\usetikzlibrary{calc}
+\usetikzlibrary{decorations.pathmorphing}
+\begin{tikzpicture}[overlay,remember picture]
+\node (A) [xshift=1.8cm,yshift=0.5cm] at (current page.south west) {};
+    \node (B) [xshift=1.8cm,yshift=-0.5cm] at (current page.north west) {};
+    \node (C) [xshift=-0.5cm,yshift=-0.5cm] at (current page.north east) {};
+    \node (D) [xshift=-0.5cm,yshift=0.5cm] at (current page.south east) {};
+    \coordinate (cA) at (A) ;
+    \coordinate (cB) at (B);
+    \coordinate (cC) at (C);
+    \coordinate (cD) at (D) ;
+    \draw[line width=1mm] (cA) -- (cB) -- (cC) -- (cD) -- cycle;
+\end{tikzpicture}

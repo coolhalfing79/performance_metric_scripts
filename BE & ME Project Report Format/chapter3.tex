@@ -1,0 +1,59 @@
+%DO NOT MESS AROUND WITH THE CODE ON THIS PAGE UNLESS YOU %REALLY KNOW WHAT YOU ARE DOING
+\chapter{Project Objectives} \label{Project Objectives}
+\section{Project Objectives} \label{Project Objective}
+\noindent Following is the list of objectives that we wish to achieve in this project:\\
+\vspace{-1cm}
+\begin{itemize}
+\item To design and implement an Fuzzy optimised Objective function for IPV6 routing protocol for low power and lossy networks(RPL) by  combining metrics such as energy, delay, hopcount and ETX for the preferred parent selection decision. 
+\item Optimising an IOT network hence improving the exchange of data and information among various sensor devices in the physical environment
+\item Comparative performance evaluation of the present objective functions (OF0 and MRHOF) and the optimized objective function.
+\end{itemize}
+
+\section{Project Methodology} \label{Project Methodology}
+\noindent\textbf{Carrying out test simulations for different number of motes using the MRHOF and OF0 objective functions and comparing their performance\\
+}\vspace{-1cm}
+\begin{itemize}
+\item We are going to consider a network topology having 70, 90, 100 motes respectively. Network simulations are carried out using the mrhof and of0 objective function respectively.The Minimum Rank with Hysteresis Objective Function, (MRHOF) is designed to find the paths with the smallest path cost whereas the objective function zero (OF0) is based on the hop count. The implementation of MRHOF is suitable for use in sensor networks that require data delivery in the reliable network. While OF0 is suitable for use in sensor network that require fast formation network link and low power consumption
+\end{itemize}
+
+
+
+\noindent\textbf{Designing a fuzzy controller using matlab\\
+}\vspace{-1cm}
+\begin{itemize}
+\item The Fuzzy Logic Controller block implements a fuzzy inference system (FIS) in Simulink®. You specify the FIS to evaluate using the FIS name parameter.
+\item We are using the ‘Mamdani’ model of the FIS.
+\item Input and output membership functions are defined
+\item We are implementing it in 2 stages
+\item If-then rules are defined.
+\item Simulink is used to connect the 2 stages and give the final defuzzified output.Simulink, an add-on product to MATLAB, provides an interactive, graphical environment for modeling, simulating, and analyzing of dynamic systems
+\end{itemize}
+
+
+\noindent\textbf{Designing the new objective function which optimizes the iot network using fuzzy logic:\\
+}
+\vspace{-1cm}
+\begin{itemize}
+\item Objective function is written in C language
+\end{itemize}
+\noindent\textbf{Carrying out test simulations using the new objective function:\\
+}\vspace{-1cm}
+\begin{itemize}
+\item Using the same topology of 70,90,100 motes , the new objective function will be 
+Evaluated and performance will be compared with the performance obtained using mrhof and of0 objective functions.
+\end{itemize}
+ 
+\noindent\textbf{Carrying out implementation using motes and evaluating data transfer between the motes} 
+\vspace{-1cm}
+\begin{itemize}
+\item Physical motes such as TelosB will be used to check the actual data transfer between the motes.
+\end{itemize}
+\noindent\textbf{Applying the optimised network in the physical environment}
+\vspace{-1cm}
+\begin{itemize}
+\item The optimised IOT network will enhance the data transfer between the devices connected in the network
+\item IOT network has applications in many fields such as process automation, home automation, smart cars, decision analytics, and smart grids.
+\end{itemize}
+
+
+\newpage
