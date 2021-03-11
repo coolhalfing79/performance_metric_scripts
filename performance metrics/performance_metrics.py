@@ -13,7 +13,7 @@ def main(argv):
     'main function'
     try:
         logfile = argv[1]
-        energylogfile = argv[2]
+        resultfile = argv[2]
     except IndexError:
         print('no log files provided')
     if 'resultdir' not in os.listdir():
@@ -30,7 +30,7 @@ def main(argv):
     metrics = (
         (networksetuptime(logfile), 'NETWORK SETUP TIME'),
         (network_latency_reliability(logfile), 'NETWORK LATENCY & PDR'),
-        (energyconsumption(energylogfile), 'ENERGY CONSUMPTION'),
+        (energyconsumption(logfile), 'ENERGY CONSUMPTION'),
         (networktraffic(logfile), 'NETWORK TRAFFIC')
     )
 
@@ -41,13 +41,7 @@ def main(argv):
         for key, value in metric.items():
             print(key, '\t:', value)
 
-    if '70' in logfile:
-        n = '70'
-    elif '90' in logfile:
-        n = '90'
-    else:
-        n = '100'
-    resultfile = resultdir + f'/result{n}.csv'
+    resultfile = resultdir + f'/{resultfile}'
     with open(resultfile, 'a') as csvfile:
         csvwriter = csv.DictWriter(csvfile, result.keys())
         if not os.stat(resultfile).st_size:
@@ -165,12 +159,12 @@ def energyconsumption(logfile):
               'radio on time': 0}
     with open(logfile) as infile:
         for row in infile:
-            if '#P' in row:
+            if '#E' in row:
                 digits = re.findall(r'\d+', row)
-                metric['total cpu'] += int(digits[8])
-                metric['total lpm'] += int(digits[9])
-                metric['total transmit ticks'] += int(digits[10])
-                metric['total listen ticks'] += int(digits[11])
+                metric['total cpu'] += int(digits[4])
+                metric['total lpm'] += int(digits[5])
+                metric['total transmit ticks'] += int(digits[6])
+                metric['total listen ticks'] += int(digits[7])
 
     try:
         metric['radio on time'] += ((metric['total transmit ticks'] + metric['total listen ticks'])/(
